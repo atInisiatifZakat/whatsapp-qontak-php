@@ -67,6 +67,18 @@ echo $response->getName();
 
 ## Testing
 
+🧹 Fixing codebase with **Easy Coding Standard**:
+
+```bash
+composer ecs
+```
+
+⚗️ Run static analysis using **Psalm**:
+
+```bash
+composer psalm
+```
+
 🚀 Run the entire test suite:
 
 ```bash
