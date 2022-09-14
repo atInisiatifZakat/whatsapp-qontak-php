@@ -1,0 +1,8 @@
+.idea
+vendor
+
+.phpunit.result.cache
+composer.lock
+phpunit.xml
+
+send.php

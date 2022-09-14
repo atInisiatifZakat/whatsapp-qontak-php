@@ -1,0 +1,48 @@
+{
+    "name": "inisiatif/whatsapp-qontak-php",
+    "description": "Sending WhatsApp message using Qontak",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nuradiyana",
+            "email": "me@nooradiana.com"
+        }
+    ],
+    "require": {
+        "php": "^7.1 || ^8.0",
+        "ext-json": "*",
+        "php-http/client-common": "^2.5",
+        "psr/http-client-implementation": "^1.0",
+        "webmozart/assert": "^1.11"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.5",
+        "php-http/mock-client": "^1.5",
+        "phpunit/phpunit": "^9.5",
+        "symplify/easy-coding-standard": "^11.1",
+        "vimeo/psalm": "^4.27"
+    },
+    "autoload": {
+        "psr-4": {
+            "Inisiatif\\WhatsappQontakPhp\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Inisiatif\\WhatsappQontakPhp\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "scripts": {
+        "test": "phpunit",
+        "ecs": "ecs --fix",
+        "psalm": "psalm"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
