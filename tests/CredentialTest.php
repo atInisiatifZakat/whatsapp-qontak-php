@@ -39,4 +39,18 @@ final class CredentialTest extends TestCase
             $credential->getOAuthCredential()
         );
     }
+
+    public function test_create_from_array_credentials(): void
+    {
+        $config = [
+            'username' => 'username',
+            'password' => 'password',
+            'client_id' => 'clientId',
+            'client_secret' => 'secret',
+        ];
+
+        $credential = Credential::fromArray($config);
+
+        $this->assertSame($config, $credential->toArray());
+    }
 }

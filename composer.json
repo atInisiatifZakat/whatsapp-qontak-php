@@ -34,10 +34,7 @@
         }
     },
     "config": {
-        "sort-packages": true,
-        "platform": {
-            "php": "7.1.99"
-        }
+        "sort-packages": true
     },
     "scripts": {
         "test": "phpunit",

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Inisiatif\WhatsappQontakPhp;
 
+use Webmozart\Assert\Assert;
+
 final class Credential
 {
     /**
@@ -32,6 +34,18 @@ final class Credential
         $this->password = $password;
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
+    }
+
+    public static function fromArray(array $data): self
+    {
+        Assert::allStringNotEmpty($data);
+
+        Assert::keyExists($data, 'username');
+        Assert::keyExists($data, 'password');
+        Assert::keyExists($data, 'client_id');
+        Assert::keyExists($data, 'client_secret');
+
+        return new self($data['username'], $data['password'], $data['client_id'], $data['client_secret']);
     }
 
     public function getUsername(): string
