@@ -66,7 +66,7 @@ final class MessageUtil
 
         foreach ($this->message->getButtons() as $key => $button) {
             $buttons[] = [
-                'index' => $key,
+                'index' => (string) $key,
             ] + $button->toArray();
         }
 
