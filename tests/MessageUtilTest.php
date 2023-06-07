@@ -48,7 +48,7 @@ final class MessageUtilTest extends TestCase
                 ],
                 'buttons' => [
                     [
-                        'index' => 0,
+                        'index' => '0',
                         'type' => 'url',
                         'value' => 'https://example.com',
                     ],
@@ -102,7 +102,7 @@ final class MessageUtilTest extends TestCase
                 ],
                 'buttons' => [
                     [
-                        'index' => 0,
+                        'index' => '0',
                         'type' => 'url',
                         'value' => 'https://example.com',
                     ],
