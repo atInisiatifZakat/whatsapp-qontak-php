@@ -32,7 +32,7 @@ final class HeaderTest extends TestCase
     public function test_format_validation(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectErrorMessage('Expected one of: "DOCUMENT", "VIDEO", "IMAGE". Got: "INVALID TYPE"');
+        $this->expectExceptionMessage('Expected one of: "DOCUMENT", "VIDEO", "IMAGE". Got: "INVALID TYPE"');
 
         new Header('INVALID TYPE', 'https://example.com', 'example.pdf');
     }

@@ -13,7 +13,7 @@ final class LanguageTest extends TestCase
     public function test_length_validation(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectErrorMessage('Expected a value to contain 2 characters. Got: "foo"');
+        $this->expectExceptionMessage('Expected a value to contain 2 characters. Got: "foo"');
 
         new Language('foo');
     }
@@ -21,7 +21,7 @@ final class LanguageTest extends TestCase
     public function test_value_validation(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectErrorMessage('Expected one of: "id", "en". Got: "de"');
+        $this->expectExceptionMessage('Expected one of: "id", "en". Got: "de"');
 
         new Language('de');
     }
