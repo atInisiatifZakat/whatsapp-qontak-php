@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Inisiatif\WhatsappQontakPhp\Tests;
 
 use Mockery;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Nyholm\Psr7\Stream;
 use PHPUnit\Framework\TestCase;
 use Inisiatif\WhatsappQontakPhp\Client;
 use Psr\Http\Message\ResponseInterface;
@@ -28,8 +30,12 @@ final class ClientTest extends TestCase
         $message = new Message($receiver);
 
         $mResponse = Mockery::mock(ResponseInterface::class);
-        $mResponse->expects('getBody')->andReturn('{"access_token":"access-token","token_type":"bearer","expires_in":31556952,"refresh_token":"refresh-token","created_at":1663138844}');
-        $mResponse->expects('getBody')->andReturn('{"status": "success", "data": { "id": "dataId", "name": "Foo Bar"}}');
+        $mResponse->expects('getBody')->andReturn(
+            (new Psr17Factory())->createStream('{"access_token":"access-token","token_type":"bearer","expires_in":31556952,"refresh_token":"refresh-token","created_at":1663138844}')
+        );
+        $mResponse->expects('getBody')->andReturn(
+            (new Psr17Factory())->createStream('{"status": "success", "data": { "id": "dataId", "name": "Foo Bar"}}')
+        );
 
         $httpClient = Mockery::mock(HttpMethodsClientInterface::class)->makePartial();
         $httpClient->expects('post')->andReturn($mResponse)->twice();
