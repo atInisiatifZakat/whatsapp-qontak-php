@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Inisiatif\WhatsappQontakPhp;
 
-use Http\Client\HttpClient;
 use Webmozart\Assert\Assert;
-use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
 use Http\Client\Common\HttpMethodsClient;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Inisiatif\WhatsappQontakPhp\Message\Message;
 use Http\Client\Common\HttpMethodsClientInterface;
+use Psr\Http\Client\ClientInterface as HttpClient;
 
 final class Client implements ClientInterface
 {
@@ -33,7 +33,7 @@ final class Client implements ClientInterface
     {
         /** @psalm-suppress PropertyTypeCoercion */
         $this->httpClient = $httpClient ?? new HttpMethodsClient(
-            HttpClientDiscovery::find(),
+            Psr18ClientDiscovery::find(),
             Psr17FactoryDiscovery::findRequestFactory(),
             Psr17FactoryDiscovery::findStreamFactory()
         );
@@ -86,11 +86,9 @@ final class Client implements ClientInterface
             /** @var array<array-key, string> $body */
             $body = \json_decode((string) $response->getBody(), true);
 
-            if(\is_array($body)) {
-                Assert::keyExists($body, 'access_token');
+            Assert::keyExists($body, 'access_token');
 
-                $this->accessToken = $body['access_token'];
-            }
+            $this->accessToken = $body['access_token'];
         }
     }
 

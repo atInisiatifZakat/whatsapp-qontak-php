@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Inisiatif\WhatsappQontakPhp;
 
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface as HttpClient;
 
 final class ClientFactory
 {
