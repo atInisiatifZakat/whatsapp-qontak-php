@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Inisiatif\WhatsappQontakPhp\Tests;
 
 use Mockery;
-use Nyholm\Psr7\Factory\Psr17Factory;
-use Nyholm\Psr7\Stream;
 use PHPUnit\Framework\TestCase;
+use Nyholm\Psr7\Factory\Psr17Factory;
 use Inisiatif\WhatsappQontakPhp\Client;
 use Psr\Http\Message\ResponseInterface;
 use Inisiatif\WhatsappQontakPhp\Credential;

@@ -86,7 +86,7 @@ final class Client implements ClientInterface
             /** @var array<array-key, string> $body */
             $body = \json_decode((string) $response->getBody(), true);
 
-            if(\is_array($body)) {
+            if (\is_array($body)) {
                 Assert::keyExists($body, 'access_token');
 
                 $this->accessToken = $body['access_token'];
