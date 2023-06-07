@@ -25,6 +25,7 @@ First your must be created a valid and approved WhatsApp template.
 
 ```php
 use Inisiatif\WhatsappQontakPhp\Client;
+use Inisiatif\WhatsappQontakPhp\Credential;
 use Inisiatif\WhatsappQontakPhp\Message\Body;
 use Inisiatif\WhatsappQontakPhp\Message\Button;
 use Inisiatif\WhatsappQontakPhp\Message\Header;
