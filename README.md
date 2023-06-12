@@ -33,7 +33,7 @@ use Inisiatif\WhatsappQontakPhp\Message\Message;
 use Inisiatif\WhatsappQontakPhp\Message\Receiver;
 use Inisiatif\WhatsappQontakPhp\Message\Language;
 
-$credentials = Credential('username', 'password', 'clientId', 'clientSecret');
+$credentials = new Credential('username', 'password', 'clientId', 'clientSecret');
 
 $client = new Client($credentials);
 
