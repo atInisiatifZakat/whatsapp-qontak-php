@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Inisiatif\WhatsappQontakPhp;
 
+use Inisiatif\WhatsappQontakPhp\Exceptions\ClientSendingException;
 use Webmozart\Assert\Assert;
 use Http\Discovery\Psr18ClientDiscovery;
 use Http\Client\Common\HttpMethodsClient;
@@ -59,17 +60,21 @@ final class Client implements ClientInterface
             )
         );
 
-        /** @var array $responseBody */
-        $responseBody = \json_decode((string) $response->getBody(), true);
+        if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
+            /** @var array $responseBody */
+            $responseBody = \json_decode((string) $response->getBody(), true);
 
-        Assert::keyExists($responseBody, 'data');
+            Assert::keyExists($responseBody, 'data');
 
-        /** @var array<string, string|int> $responseData */
-        $responseData = $responseBody['data'];
-        Assert::keyExists($responseData, 'id');
-        Assert::keyExists($responseData, 'name');
+            /** @var array<string, string|int> $responseData */
+            $responseData = $responseBody['data'];
+            Assert::keyExists($responseData, 'id');
+            Assert::keyExists($responseData, 'name');
 
-        return new Response((string) $responseData['id'], (string) $responseData['name'], $responseData);
+            return new Response((string) $responseData['id'], (string) $responseData['name'], $responseData);
+        }
+
+        throw ClientSendingException::make($response);
     }
 
     private function getAccessToken(): void
