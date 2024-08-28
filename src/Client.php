@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Inisiatif\WhatsappQontakPhp;
 
+use Psr\Log\NullLogger;
 use Psr\Log\LoggerInterface;
 use Webmozart\Assert\Assert;
 use Http\Discovery\Psr18ClientDiscovery;
@@ -46,7 +47,7 @@ final class Client implements ClientInterface
         );
 
         $this->credential = $credential;
-        $this->logger = $logger;
+        $this->logger = is_null($logger) ? new NullLogger() : $logger;
     }
 
     public function send(string $templateId, string $channelId, Message $message): Response
@@ -71,7 +72,7 @@ final class Client implements ClientInterface
             /** @var array $responseBody */
             $responseBody = \json_decode((string) $response->getBody(), true);
 
-            $this->logInfo(sprintf('[WhatsappQontakPhp] Response %s', $response->getStatusCode()), $responseBody);
+            $this->logger->info(sprintf('[WhatsappQontakPhp] Response %s', $response->getStatusCode()), $responseBody);
 
             Assert::keyExists($responseBody, 'data');
 
@@ -109,12 +110,5 @@ final class Client implements ClientInterface
     private function makeRequestBody(Message $message): array
     {
         return MessageUtil::makeRequestBody($message);
-    }
-
-    private function logInfo(string $message, array $context = []): void
-    {
-        if ($this->logger) {
-            $this->logger->info($message, $context);
-        }
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Inisiatif\WhatsappQontakPhp;
 
+use Psr\Log\LoggerInterface;
 use Psr\Http\Client\ClientInterface as HttpClient;
 
 final class ClientFactory
@@ -18,12 +19,13 @@ final class ClientFactory
      */
     private static $nullClient = null;
 
-    public static function makeFromArray(array $config, HttpClient $httpClient = null): ClientInterface
+    public static function makeFromArray(array $config, HttpClient $httpClient = null, LoggerInterface $logger = null): ClientInterface
     {
         if (! self::$client instanceof Client) {
             self::$client = new Client(
                 Credential::fromArray($config),
-                $httpClient
+                $httpClient,
+                $logger
             );
         }
 
