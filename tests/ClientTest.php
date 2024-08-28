@@ -33,7 +33,7 @@ final class ClientTest extends TestCase
         $mResponse->expects('getBody')->andReturn(
             (new Psr17Factory())->createStream('{"access_token":"access-token","token_type":"bearer","expires_in":31556952,"refresh_token":"refresh-token","created_at":1663138844}')
         );
-        $mResponse->expects('getStatusCode')->andReturn(200)->twice();
+        $mResponse->expects('getStatusCode')->andReturn(200)->times(3);
         $mResponse->expects('getBody')->andReturn(
             (new Psr17Factory())->createStream('{"status": "success", "data": { "id": "dataId", "name": "Foo Bar"}}')
         );

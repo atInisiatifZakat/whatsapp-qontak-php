@@ -34,7 +34,7 @@ final class Client implements ClientInterface
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    private $logger = null;
 
     public function __construct(Credential $credential, HttpClient $httpClient = null, LoggerInterface $logger = null)
     {
@@ -46,6 +46,7 @@ final class Client implements ClientInterface
         );
 
         $this->credential = $credential;
+        $this->logger = $logger;
     }
 
     public function send(string $templateId, string $channelId, Message $message): Response
