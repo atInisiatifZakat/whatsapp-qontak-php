@@ -112,7 +112,7 @@ final class Client implements ClientInterface
 
     private function logInfo(string $message, array $context = []): void
     {
-        if($this->logger) {
+        if ($this->logger) {
             $this->logger->info($message, $context);
         }
     }
