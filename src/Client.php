@@ -47,7 +47,7 @@ final class Client implements ClientInterface
         );
 
         $this->credential = $credential;
-        $this->logger = is_null($logger) ? new NullLogger() : $logger;
+        $this->logger = $logger === null ? new NullLogger() : $logger;
     }
 
     public function send(string $templateId, string $channelId, Message $message): Response
