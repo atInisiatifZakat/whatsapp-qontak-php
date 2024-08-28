@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Inisiatif\WhatsappQontakPhp;
 
-use Inisiatif\WhatsappQontakPhp\Exceptions\ClientSendingException;
+use Psr\Log\LoggerInterface;
 use Webmozart\Assert\Assert;
 use Http\Discovery\Psr18ClientDiscovery;
 use Http\Client\Common\HttpMethodsClient;
@@ -12,6 +12,7 @@ use Http\Discovery\Psr17FactoryDiscovery;
 use Inisiatif\WhatsappQontakPhp\Message\Message;
 use Http\Client\Common\HttpMethodsClientInterface;
 use Psr\Http\Client\ClientInterface as HttpClient;
+use Inisiatif\WhatsappQontakPhp\Exceptions\ClientSendingException;
 
 final class Client implements ClientInterface
 {
@@ -30,7 +31,12 @@ final class Client implements ClientInterface
      */
     private $credential;
 
-    public function __construct(Credential $credential, HttpClient $httpClient = null)
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(Credential $credential, HttpClient $httpClient = null, LoggerInterface $logger = null)
     {
         /** @psalm-suppress PropertyTypeCoercion */
         $this->httpClient = $httpClient ?? new HttpMethodsClient(
@@ -63,6 +69,8 @@ final class Client implements ClientInterface
         if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
             /** @var array $responseBody */
             $responseBody = \json_decode((string) $response->getBody(), true);
+
+            $this->logInfo(sprintf('[WhatsappQontakPhp] Response %s', $response->getStatusCode()), $responseBody);
 
             Assert::keyExists($responseBody, 'data');
 
@@ -100,5 +108,12 @@ final class Client implements ClientInterface
     private function makeRequestBody(Message $message): array
     {
         return MessageUtil::makeRequestBody($message);
+    }
+
+    private function logInfo(string $message, array $context = []): void
+    {
+        if($this->logger) {
+            $this->logger->info($message, $context);
+        }
     }
 }
