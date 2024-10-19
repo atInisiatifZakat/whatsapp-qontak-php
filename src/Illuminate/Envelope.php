@@ -23,11 +23,22 @@ final class Envelope
      */
     private $message;
 
-    public function __construct(string $templateId, string $channelId, Message $message)
+    /**
+     * @var string|null
+     */
+    private $accessToken;
+
+    public function __construct(?string $accessToken, string $templateId, string $channelId, Message $message)
     {
+        $this->accessToken = $accessToken;
         $this->templateId = $templateId;
         $this->channelId = $channelId;
         $this->message = $message;
+    }
+
+    public function getAccessToken(): ?string
+    {
+        return $this->accessToken;
     }
 
     public function getTemplateId(): string

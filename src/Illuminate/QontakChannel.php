@@ -26,6 +26,7 @@ final class QontakChannel
         $envelope = $notification->toQontak($notifiable);
 
         $this->client->send(
+            $envelope->getAccessToken(),
             $envelope->getTemplateId(),
             $envelope->getChannelId(),
             $envelope->getMessage()
