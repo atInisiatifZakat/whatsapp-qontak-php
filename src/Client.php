@@ -47,18 +47,25 @@ final class Client implements ClientInterface
         );
 
         $this->credential = $credential;
-        $this->logger = $logger === null ? new NullLogger() : $logger;
+        $this->logger = is_null($logger) ? new NullLogger() : $logger;
     }
 
-    public function send(string $templateId, string $channelId, Message $message): Response
+    public function send(?string $accessToken, string $templateId, string $channelId, Message $message): Response
     {
-        $this->getAccessToken();
+        // If accessToken is not provided, use the class's accessToken property
+        $token = $accessToken ?? $this->accessToken;
+
+        // Make sure to retrieve the token if it's still not set
+        if (!$token) {
+            $this->getAccessToken();  // Ensure token is available
+            $token = $this->accessToken;
+        }
 
         $response = $this->httpClient->post(
             'https://service-chat.qontak.com/api/open/v1/broadcasts/whatsapp/direct',
             [
                 'content-type' => 'application/json',
-                'Authorization' => \sprintf('Bearer %s', $this->accessToken ?? ''),
+                'Authorization' => \sprintf('Bearer %s', $token ?? ''),
             ],
             \json_encode(
                 [
