@@ -53,13 +53,32 @@ final class QontakChannelTest extends TestCase
 
   public function test_it_releases_job_when_rate_limited(): void
   {
-    $client = Mockery::mock(ClientInterface::class);
+    $credential = new Credential('username', 'password', 'clientId', 'secret');
 
-    // Siapkan dummy job
+    $rateLimitResponse = Mockery::mock(ResponseInterface::class);
+    $rateLimitResponse->shouldReceive('getStatusCode')->andReturn(429);
+    $rateLimitResponse->shouldReceive('getBody')->andReturn(
+      (new Psr17Factory())->createStream(json_encode([
+        'status' => 'error',
+        'error' => [
+          'code' => 429,
+          'messages' => [
+            'Too many requests'
+          ],
+        ]
+      ]))
+    );
+
+    $httpClient = Mockery::mock(HttpMethodsClientInterface::class);
+    $httpClient->shouldReceive('post')->andThrow(
+      new ClientSendingException($rateLimitResponse->getBody()->getContents(), 429)
+    );
+
+    $client = new Client($credential, $httpClient);
+
     $mockJob = Mockery::mock(stdClass::class);
-    $mockJob->shouldReceive('release')->with(0)->once(); // default delay
+    $mockJob->shouldReceive('release')->with(0)->once();
 
-    // Buat notification yang punya properti `job`
     $notification = Mockery::mock(QontakNotification::class);
     $notification->job = $mockJob;
 
@@ -69,17 +88,10 @@ final class QontakChannelTest extends TestCase
 
     $notification->shouldReceive('toQontak')->andReturn($envelope);
 
-    // Simulasikan exception "Too many requests"
-    $client->shouldReceive('send')->andThrow(
-      new ClientSendingException('Too many requests', 429)
-    );
-
     $channel = new QontakChannel($client);
 
-    // Eksekusi
     $channel->send(new \stdClass(), $notification);
 
-    // Assert agar tidak exception (artinya release berhasil dipanggil)
     $this->assertTrue(true);
   }
 }

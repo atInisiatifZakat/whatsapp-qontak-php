@@ -42,9 +42,8 @@ final class QontakChannel
                     }
 
                     $notification->job->release($delay);
+                    return;
                 }
-
-                return;
             }
 
             throw $e;
