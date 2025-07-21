@@ -33,9 +33,9 @@ final class QontakChannel
                 $envelope->getMessage()
             );
         } catch (ClientSendingException $e) {
-            if (str_contains($e->getMessage(), 'Too many requests')) {
+            if ($e->getCode() === 429) {
                 if (property_exists($notification, 'job') && $notification->job !== null) {
-                    $delay = 10;
+                    $delay = 0;
 
                     if ($notification instanceof QontakShouldDelay) {
 

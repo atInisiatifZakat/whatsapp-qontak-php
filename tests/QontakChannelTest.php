@@ -57,7 +57,7 @@ final class QontakChannelTest extends TestCase
 
     // Siapkan dummy job
     $mockJob = Mockery::mock(stdClass::class);
-    $mockJob->shouldReceive('release')->with(10)->once(); // default delay
+    $mockJob->shouldReceive('release')->with(0)->once(); // default delay
 
     // Buat notification yang punya properti `job`
     $notification = Mockery::mock(QontakNotification::class);
@@ -71,7 +71,7 @@ final class QontakChannelTest extends TestCase
 
     // Simulasikan exception "Too many requests"
     $client->shouldReceive('send')->andThrow(
-      new ClientSendingException('Too many requests')
+      new ClientSendingException('Too many requests', 429)
     );
 
     $channel = new QontakChannel($client);
