@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Inisiatif\WhatsappQontakPhp\Illuminate;
 
 use Inisiatif\WhatsappQontakPhp\ClientInterface;
+use Inisiatif\WhatsappQontakPhp\Exceptions\ClientSendingException;
 
 final class QontakChannel
 {
@@ -25,10 +26,27 @@ final class QontakChannel
     {
         $envelope = $notification->toQontak($notifiable);
 
-        $this->client->send(
-            $envelope->getTemplateId(),
-            $envelope->getChannelId(),
-            $envelope->getMessage()
-        );
+        try {
+            $this->client->send(
+                $envelope->getTemplateId(),
+                $envelope->getChannelId(),
+                $envelope->getMessage()
+            );
+        } catch (ClientSendingException $e) {
+            if ($e->getCode() === 429) {
+                if (property_exists($notification, 'job') && $notification->job !== null) {
+                    $delay = 0;
+
+                    if ($notification instanceof QontakShouldDelay) {
+                        $delay = $notification->getReleaseDelay();
+                    }
+
+                    $notification->job->release($delay);
+                    return;
+                }
+            }
+
+            throw $e;
+        }
     }
 }
