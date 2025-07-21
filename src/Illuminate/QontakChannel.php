@@ -38,7 +38,6 @@ final class QontakChannel
                     $delay = 0;
 
                     if ($notification instanceof QontakShouldDelay) {
-
                         $delay = $notification->getReleaseDelay();
                     }
 
