@@ -63,7 +63,11 @@ final class QontakChannelTest extends TestCase
         'error' => [
           'code' => 429,
           'messages' => [
-            'Too many requests'
+            'Too many requests',
+            'organization_id: 01c228aa-381d-4b88-a0e4-8bb0ef10c7fe',
+            'rate_limit_limit: 100',
+            'rate_limit_remaining: 0',
+            'rate_limit_reset: 10'
           ],
         ]
       ]))
@@ -77,7 +81,8 @@ final class QontakChannelTest extends TestCase
     $client = new Client($credential, $httpClient);
 
     $mockJob = Mockery::mock(stdClass::class);
-    $mockJob->shouldReceive('release')->with(0)->once();
+    // rate_limit_reset + 2 = 12 seconds delay
+    $mockJob->shouldReceive('release')->with(12)->once();
 
     $notification = Mockery::mock(QontakNotification::class);
     $notification->job = $mockJob;
