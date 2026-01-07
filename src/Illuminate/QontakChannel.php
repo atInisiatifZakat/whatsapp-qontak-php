@@ -41,6 +41,20 @@ final class QontakChannel
                         $delay = $notification->getReleaseDelay();
                     }
 
+                    // get delay from rate_limit_reset
+                    $errorResponse = json_decode($e->getMessage(), true);
+
+                    if (isset($errorResponse['error']['messages']) && is_array($errorResponse['error']['messages'])) {
+                        foreach ($errorResponse['error']['messages'] as $message) {
+                            if (is_string($message) && str_starts_with($message, 'rate_limit_reset:')) {
+                                $delay = (int) trim(str_replace('rate_limit_reset:', '', $message));
+                                break;
+                            }
+                        }
+                    }
+
+                    $delay = max(2, $delay + 2);
+
                     $notification->job->release($delay);
                     return;
                 }
